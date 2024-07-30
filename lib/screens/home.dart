@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 
-import 'app_nav_bar.dart';
-import 'screen_register_user.dart';
-import 'screen_login.dart';
+import '../widgets/app_nav_bar.dart';
+import 'register_user.dart';
+import 'login.dart';
+
+var heart  = Emoji('heart', '❤️');
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -23,9 +26,10 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Velkommen til MakkerApp',
+              'Velkommen til Makker ❤️💪',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
+            Padding(padding: EdgeInsets.all(10.0)),
             ElevatedButton(
               style: ElevatedButton.styleFrom(),
               onPressed: () {
@@ -47,6 +51,7 @@ class _HomePageState extends State<HomePage> {
               // Navigate to second route when tapped.
               child: const Text('Registrer ny bruker'),
             ),
+            Padding(padding: EdgeInsets.all(16.0)),
             TextButton(
               child: const Text('Om Makker'),
               style: TextButton.styleFrom(),
@@ -55,13 +60,21 @@ class _HomePageState extends State<HomePage> {
                   context: context,
                   builder: (context) => AlertDialog(
                     title: const Text('Om Makker'),
-                    content: const Text('Makker er din utvalgte app for å finne din neste klatrepartner. (...)'),
+                    content: const Text(
+                      'Makker hjelper deg å finne din neste turkamerat eller klatrepartner. (...)'
+                      ),
                     actions: [
+                      TextButton(
+                        child: const Text('Kontakt oss'),
+                        onPressed: () {
+                          // Text('email here');
+                        },
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('OK'),
+                        child: const Text('Tilbake'),
                       )
                     ]
                   ),

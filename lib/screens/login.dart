@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'app_nav_bar.dart';
+import '../widgets/app_nav_bar.dart';
 
-class RegisterUserForm extends StatefulWidget {
+
+class LogInForm extends StatefulWidget {
   @override
-  _RegisterUserFormState createState() => _RegisterUserFormState();
+  _LogInFormState createState() => _LogInFormState();
 }
 
-class _RegisterUserFormState extends State<RegisterUserForm> {
+class _LogInFormState extends State<LogInForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // A key for managing the form
   String _name = ''; // Variable to store the entered name
   String _email = ''; // Variable to store the entered email
@@ -25,7 +26,7 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNav(title: 'Registrer ny bruker'),
+      appBar: AppBarNav(title: 'Logg inn'),
       body: Form(
         key: _formKey, // Associate the form key with this Form widget
         child: Padding(

@@ -1,32 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:makker_app/client/database_service.dart';
 
-import 'app_nav_bar.dart';
+import '../widgets/app_nav_bar.dart';
 
 
-class LogInForm extends StatefulWidget {
+class RegisterUserForm extends StatefulWidget {
   @override
-  _LogInFormState createState() => _LogInFormState();
+  _RegisterUserFormState createState() => _RegisterUserFormState();
 }
 
-class _LogInFormState extends State<LogInForm> {
+class _RegisterUserFormState extends State<RegisterUserForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // A key for managing the form
+  final DatabaseService _databaseService = DatabaseService.instance;
+
   String _name = ''; // Variable to store the entered name
   String _email = ''; // Variable to store the entered email
+
 
   void _submitForm() {
     // Check if the form is valid
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save(); // Save the form data
       // You can perform actions with the form data here and extract the details
-      print('Name: $_name'); // Print the name
-      print('Email: $_email'); // Print the email
+      //save data here:
+      _databaseService.addUser(_name);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+                // Retrieve the text the that user has entered by using the
+                // TextEditingController.
+            content: Text('The following account has been registerd:\nName: $_name\nEmail: $_email'),
+          );
+        },
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNav(title: 'Logg inn'),
+      appBar: AppBarNav(title: 'Registrer ny bruker'),
       body: Form(
         key: _formKey, // Associate the form key with this Form widget
         child: Padding(
@@ -62,8 +76,10 @@ class _LogInFormState extends State<LogInForm> {
               ),
               SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: _submitForm, // Call the _submitForm function when the button is pressed
                 child: Text('Submit'), // Text on the button
+                onPressed: () {
+                  _submitForm();
+                },
               ),
             ],
           ),

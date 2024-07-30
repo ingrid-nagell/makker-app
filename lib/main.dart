@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screen_home_page.dart';
+import 'screens/home.dart';
 
 void main() {
   runApp(const MakkerApp());
