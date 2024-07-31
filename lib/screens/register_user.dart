@@ -10,11 +10,15 @@ class RegisterUserForm extends StatefulWidget {
 }
 
 class _RegisterUserFormState extends State<RegisterUserForm> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // A key for managing the form
+  // A key for managing the form:
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final DatabaseService _databaseService = DatabaseService.instance;
 
-  String _name = ''; // Variable to store the entered name
-  String _email = ''; // Variable to store the entered email
+  // Variables to store the entered data
+  String _firstname = '';
+  String _lastname = '';
+  String _email = '';
+  String _password = '';
 
 
   void _submitForm() {
@@ -23,14 +27,14 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
       _formKey.currentState!.save(); // Save the form data
       // You can perform actions with the form data here and extract the details
       //save data here:
-      _databaseService.addUser(_name);
+      _databaseService.addUser(_firstname, _lastname, _email, _password);
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-                // Retrieve the text the that user has entered by using the
-                // TextEditingController.
-            content: Text('The following account has been registerd:\nName: $_name\nEmail: $_email'),
+            content: Text(
+              'Bruker registrert:\nNavn: $_firstname $_lastname\nE-post: $_email\nPassord: $_password'
+            ),
           );
         },
       );
@@ -48,24 +52,37 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(labelText: 'Name'), // Label for the name field
+                decoration: InputDecoration(labelText: 'Fornavn'), // Label for the name field
                 validator: (value) {
                   // Validation function for the name field
                   if (value!.isEmpty) {
-                    return 'Please enter your name.'; // Return an error message if the name is empty
+                    return 'Vennligst oppgi ditt fornavn.'; // Return an error message if the name is empty
                   }
                   return null; // Return null if the name is valid
                 },
                 onSaved: (value) {
-                  _name = value!; // Save the entered name
+                  _firstname = value!; // Save the entered name
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Email'), // Label for the email field
+                decoration: InputDecoration(labelText: 'Etternavn'), // Label for the name field
+                validator: (value) {
+                  // Validation function for the name field
+                  if (value!.isEmpty) {
+                    return 'Vennligst oppgi ditt etternavn'; // Return an error message if the name is empty
+                  }
+                  return null; // Return null if the name is valid
+                },
+                onSaved: (value) {
+                  _lastname = value!; // Save the entered name
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'E-post'), // Label for the email field
                 validator: (value) {
                   // Validation function for the email field
                   if (value!.isEmpty) {
-                    return 'Please enter your email.'; // Return an error message if the email is empty
+                    return 'Vennligst oppgi en gyldig epostadresse.'; // Return an error message if the email is empty
                   }
                   // You can add more complex validation logic here
                   return null; // Return null if the email is valid
@@ -74,9 +91,23 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
                   _email = value!; // Save the entered email
                 },
               ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Passord'), // Label for the email field
+                validator: (value) {
+                  // Validation function for the email field
+                  if (value!.isEmpty) {
+                    return 'Vennligst oppgi ett gyldig passord.'; // Return an error message if the email is empty
+                  }
+                  // You can add more complex validation logic here
+                  return null; // Return null if the email is valid
+                },
+                onSaved: (value) {
+                  _password = value!; // Save the entered email
+                },
+              ),
               SizedBox(height: 20.0),
               ElevatedButton(
-                child: Text('Submit'), // Text on the button
+                child: Text('Opprett bruker'), // Text on the button
                 onPressed: () {
                   _submitForm();
                 },

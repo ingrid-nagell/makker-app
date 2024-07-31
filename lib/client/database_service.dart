@@ -1,29 +1,25 @@
 import 'dart:async';
 
 // import 'package:flutter/widgets.dart';
+import 'package:makker_app/models/users.dart';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-//https://www.youtube.com/watch?v=pFctmsTDoa0
+// https://www.youtube.com/watch?v=pFctmsTDoa0
 //17m
-void main() {
-  final  DatabaseService _databaseService = DatabaseService.instance;
-  print(_databaseService);
-  // insertUser(fido);
-  // var all_users = users();
-  // print(all_users);
-}
 
 class DatabaseService {
 
+  final String _users_table_name = 'users';
   final String users_db_id = 'id';
   final String users_db_first_name = 'first_name';
   final String users_db_last_name = 'last_name';
   final String users_db_pwd = 'password';
+  final String users_db_email = 'email';
   final String users_db_gender = 'gender';
   final String users_db_age = 'age';
   final String users_db_loaction = 'location';
-
 
   static Database? _db;
   // Only one instance of a database service:
@@ -38,17 +34,21 @@ class DatabaseService {
 
   Future<Database> getDatabase() async {
     final databaseDirPath = await getDatabasesPath();
-    final databasePath = join(databaseDirPath, 'users.db');
+    print("PATH: $databaseDirPath");
+    //data/user/0/com.example.makker_app/databases
+    final databasePath = join(databaseDirPath, '$_users_table_name.db');
     final database = await openDatabase(
       databasePath,
       version: 1,
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE
-            users(
+            $_users_table_name(
               $users_db_id INTEGER PRIMARY KEY,
               $users_db_first_name TEXT,
-              $users_db_last_name INTEGER
+              $users_db_last_name TEXT,
+              $users_db_email TEXT,
+              $users_db_pwd TEXT
             )
           ''');
       },
@@ -56,50 +56,30 @@ class DatabaseService {
     return database;
   }
 
-  void addUser(String name,) async {
+  void addUser(String firstname, String lastname, String email, String password) async {
     final db = await database;
     await db.insert(
       'users', {
-        users_db_first_name: name,
-        users_db_last_name: 23,
+        users_db_first_name: firstname,
+        users_db_last_name: lastname,
+        users_db_email: email,
+        users_db_pwd: password,
       },
     );
   }
 
-  void getUsers() async {
+  Future<List<User>?> getUser() async {
     final db = await database;
-    await db.insert(
-      'users', {
-        users_db_first_name: 'Hello',
-        users_db_last_name: 23,
-      },
-    );
+    final data = await db.query('$_users_table_name');
+    print(data);
+    List<User> user = data.map((e) => User(
+      id: e['id'] as int,
+      firstname: e['firstname'] as String,
+      lastname: e['lastname'] as String,
+      email: e['email'] as String,
+      password: e['password'] as String,
+    )).toList();
+    return user;
   }
-}
 
-class Userx {
-  final int id;
-  final String firstName;
-  final int age;
-
-  Userx({
-    required this.id,
-    required this.firstName,
-    required this.age,
-  });
-
-  // Convert a User into a Map.
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'firstName': firstName,
-      'age': age,
-    };
-  }
-  // Implement toString to make it easier to see information about
-  // each user when using the print statement.
-  @override
-  String toString() {
-    return 'User{id: $id, firstName: $firstName, age: $age}';
-  }
 }

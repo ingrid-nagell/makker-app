@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 
+import 'package:makker_app/screens/dev.dart';
+
 import '../widgets/app_nav_bar.dart';
 import 'register_user.dart';
 import 'login.dart';
+
 
 var heart  = Emoji('heart', '❤️');
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -17,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,11 +83,33 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-
             ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DevPage(title: 'dev')),
+                );
+              },
+              // Navigate to second route when tapped.
+              child: const Text('DEV PAGE'),
+            ),
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(),
+            //   onPressed: () {
+            //     print("hello");
+            //     // deleteDatabase('users.db');
+            //   },
+            //   // Navigate to second route when tapped.
+            //   child: const Text('DELETE USERS'),
+            // ),
           ],
         ),
       ),
     );
   }
+
+  // Future<void> deleteDatabase(String path) =>
+  //   databaseFactory.deleteDatabase(path);
 }

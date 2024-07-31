@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'screens/home.dart';
 
@@ -12,6 +13,10 @@ class MakkerApp extends StatelessWidget {
   // Widget root of application.
   @override
   Widget build(BuildContext context) {
+
+    // For dev (deleting DBs)
+    // deleteDatabase('users.db');
+
     return MaterialApp(
       title: 'MakkerTheme',
       theme: ThemeData(
@@ -22,4 +27,8 @@ class MakkerApp extends StatelessWidget {
       home: const HomePage(title: 'Makker\nFinn din klatrepartner'),
     );
   }
+
+  // For DEV:
+  Future<void> deleteDatabase(String path) =>
+    databaseFactory.deleteDatabase(path);
 }
