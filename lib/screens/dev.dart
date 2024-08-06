@@ -33,12 +33,12 @@ class _DevPageState extends State<DevPage> {
           itemCount: snapshot.data?.length ?? 0,
           itemBuilder: (context, index) {
             User user = snapshot.data![index];
+            print(user.firstname);
             return ListTile(title: Text(user.firstname));
           },
         );
       }
     );
   }
-
 
 }
