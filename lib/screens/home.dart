@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import 'package:makker_app/screens/create_activity.dart';
 
+// Screen modules:
 import 'package:makker_app/screens/dev.dart';
+import 'package:makker_app/screens/inbox.dart';
+import 'package:makker_app/screens/shop_activity.dart';
 
 import '../widgets/app_nav_bar.dart';
 import 'register_user.dart';
@@ -84,7 +88,11 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+
+            // DEV BUTTONS:
+            Padding(padding: EdgeInsets.all(16.0)),
             ElevatedButton(
+              child: const Text('DEV PAGE'),
               style: ElevatedButton.styleFrom(),
               onPressed: () {
                 Navigator.push(
@@ -92,8 +100,36 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => DevPage(title: 'dev')),
                 );
               },
-              // Navigate to second route when tapped.
-              child: const Text('DEV PAGE'),
+            ),
+            TextButton(
+              child: const Text('Innboks'),
+              style: TextButton.styleFrom(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Inbox()),
+                );
+              },
+            ),
+            TextButton(
+              child: const Text('Se alle aktiviteter'),
+              style: TextButton.styleFrom(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ShopActivity()),
+                );
+              },
+            ),
+            TextButton(
+              child: const Text('Opprett aktivitet'),
+              style: TextButton.styleFrom(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CreateActivity()),
+                );
+              },
             ),
             // ElevatedButton(
             //   style: ElevatedButton.styleFrom(),
