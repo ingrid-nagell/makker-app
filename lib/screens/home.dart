@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_emoji/flutter_emoji.dart';
-import 'package:makker_app/screens/create_activity.dart';
 
-// Screen modules:
+// from /modules:
 import 'package:makker_app/screens/dev.dart';
 import 'package:makker_app/screens/inbox.dart';
 import 'package:makker_app/screens/shop_activity.dart';
+import 'package:makker_app/screens/login.dart';
+import 'package:makker_app/screens/register_user.dart';
+import 'package:makker_app/screens/create_activity.dart';
 
-import '../widgets/app_nav_bar.dart';
-import 'register_user.dart';
-import 'login.dart';
-
-
-var heart  = Emoji('heart', '❤️');
+// from /widgets:
+import 'package:makker_app/widgets/app_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});

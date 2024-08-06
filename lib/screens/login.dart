@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/app_nav_bar.dart';
+// from /widgets:
+import 'package:makker_app/widgets/app_nav_bar.dart';
 
 
 class LogInForm extends StatefulWidget {

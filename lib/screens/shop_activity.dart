@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-// project packages:
-import 'package:makker_app/client/database_service.dart';
-import '../widgets/app_nav_bar.dart';
+// from widgets:
+import 'package:makker_app/widgets/app_nav_bar.dart';
 
 
 class ShopActivity extends StatefulWidget {
