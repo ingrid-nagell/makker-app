@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:makker_app/client/database_service.dart';
 
-import '../widgets/app_nav_bar.dart';
+// from /client:
+import 'package:makker_app/client/database_service_users.dart';
+
+// from /widgets:
+import 'package:makker_app/widgets/app_nav_bar.dart';
 
 
 class RegisterUserForm extends StatefulWidget {
@@ -12,7 +15,7 @@ class RegisterUserForm extends StatefulWidget {
 class _RegisterUserFormState extends State<RegisterUserForm> {
   // A key for managing the form:
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final DatabaseService _databaseService = DatabaseService.instance;
+  final DatabaseServiceUsers _databaseService = DatabaseServiceUsers.instance;
 
   // Variables to store the entered data
   String _firstname = '';
