@@ -12,14 +12,14 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseService {
 
   final String _users_table_name = 'users';
-  final String users_db_id = 'id';
-  final String users_db_first_name = 'first_name';
-  final String users_db_last_name = 'last_name';
-  final String users_db_pwd = 'password';
-  final String users_db_email = 'email';
-  final String users_db_gender = 'gender';
-  final String users_db_age = 'age';
-  final String users_db_loaction = 'location';
+  final String _users_db_id = 'id';
+  final String _users_db_first_name = 'first_name';
+  final String _users_db_last_name = 'last_name';
+  final String _users_db_pwd = 'password';
+  final String _users_db_email = 'email';
+  final String _users_db_gender = 'gender';
+  final String _users_db_age = 'age';
+  final String _users_db_loaction = 'location';
 
   static Database? _db;
   // Only one instance of a database service:
@@ -44,11 +44,11 @@ class DatabaseService {
         db.execute('''
           CREATE TABLE
             $_users_table_name(
-              $users_db_id INTEGER PRIMARY KEY,
-              $users_db_first_name TEXT,
-              $users_db_last_name TEXT,
-              $users_db_email TEXT,
-              $users_db_pwd TEXT
+              $_users_db_id INTEGER PRIMARY KEY,
+              $_users_db_first_name TEXT,
+              $_users_db_last_name TEXT,
+              $_users_db_email TEXT,
+              $_users_db_pwd TEXT
             )
           ''');
       },
@@ -60,10 +60,10 @@ class DatabaseService {
     final db = await database;
     await db.insert(
       'users', {
-        users_db_first_name: firstname,
-        users_db_last_name: lastname,
-        users_db_email: email,
-        users_db_pwd: password,
+        _users_db_first_name: firstname,
+        _users_db_last_name: lastname,
+        _users_db_email: email,
+        _users_db_pwd: password,
       },
     );
   }
