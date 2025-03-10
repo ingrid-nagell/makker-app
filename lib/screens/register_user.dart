@@ -8,9 +8,11 @@ import 'package:makker_app/widgets/app_nav_bar.dart';
 
 
 class RegisterUserForm extends StatefulWidget {
+  const RegisterUserForm({super.key});
+
   @override
   _RegisterUserFormState createState() => _RegisterUserFormState();
-}
+  }
 
 class _RegisterUserFormState extends State<RegisterUserForm> {
   // A key for managing the form:
@@ -47,15 +49,15 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNav(title: 'Registrer ny bruker'),
+      appBar: const AppBarNav(title: 'Registrer ny bruker'),
       body: Form(
         key: _formKey, // Associate the form key with this Form widget
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(left: 100, right: 100, top: 25), // Add padding on left and right side
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(labelText: 'Fornavn'), // Label for the name field
+                decoration: const InputDecoration(labelText: 'Fornavn'), // Label for the name field
                 validator: (value) {
                   // Validation function for the name field
                   if (value!.isEmpty) {
@@ -68,7 +70,7 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Etternavn'), // Label for the name field
+                decoration: const InputDecoration(labelText: 'Etternavn'), // Label for the name field
                 validator: (value) {
                   // Validation function for the name field
                   if (value!.isEmpty) {
@@ -81,7 +83,7 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'E-post'), // Label for the email field
+                decoration: const InputDecoration(labelText: 'E-post'), // Label for the email field
                 validator: (value) {
                   // Validation function for the email field
                   if (value!.isEmpty) {
@@ -95,7 +97,7 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Passord'), // Label for the email field
+                decoration: const InputDecoration(labelText: 'Passord'), // Label for the email field
                 validator: (value) {
                   // Validation function for the email field
                   if (value!.isEmpty) {
@@ -108,9 +110,9 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
                   _password = value!; // Save the entered email
                 },
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               ElevatedButton(
-                child: Text('Opprett bruker'), // Text on the button
+                child: const Text('Opprett bruker'), // Text on the button
                 onPressed: () {
                   _submitForm();
                 },

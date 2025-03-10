@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'screens/home.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized;
   runApp(const MakkerApp());
 }
 
@@ -15,7 +16,8 @@ class MakkerApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     // For dev (deleting DBs)
-    // deleteDatabase('users.db');
+    // deleteDatabase('/data/user/0/com.example.makker_app/databases/activities.db');
+    // deleteDatabase('/data/user/0/com.example.makker_app/databases/users.db');
 
     return MaterialApp(
       title: 'MakkerTheme',
@@ -24,8 +26,9 @@ class MakkerApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellow),
         useMaterial3: true,
       ),
-      home: const HomePage(title: 'Makker\nFinn din klatrepartner'),
+      home: const HomePage(title: 'Finn din makker ❤️👥'),
     );
+
   }
 
   // For DEV:

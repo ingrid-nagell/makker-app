@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:makker_app/widgets/app_nav_bar.dart';
 import 'package:makker_app/client/database_service_users.dart';
