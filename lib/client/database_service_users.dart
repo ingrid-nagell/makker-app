@@ -9,8 +9,8 @@ import 'package:makker_app/models/users.dart';
 //17m
 
 class DatabaseServiceUsers {
-
   final String _usersTableName = 'users';
+
   final String _usersId = 'id';
   final String _usersFirstName = 'first_name';
   final String _usersLastName = 'last_name';
@@ -55,7 +55,12 @@ class DatabaseServiceUsers {
     return database;
   }
 
-  void addUser(String firstname, String lastname, String email, String password,) async {
+  void addUser(
+    String firstname,
+    String lastname,
+    String email,
+    String password,
+  ) async {
     final db = await database;
     await db.insert(
       _usersTableName, {

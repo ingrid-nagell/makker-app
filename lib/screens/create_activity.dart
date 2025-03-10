@@ -14,25 +14,24 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final DatabaseServiceActivities _databaseService = DatabaseServiceActivities.instance;
 
-  String _createdBy = 'DEVBRUKER';
+  int _userId = 123;
   String _date = '';
   String _category = '';
   String _location = '';
   String _address = '';
   String _description = '';
-  bool _active = true;
 
   void _newActivity() {
     // Check if the form is valid
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _databaseService.addActivity(_createdBy, _date, _category, _location, _address, _description, _active);
+      _databaseService.addActivity(_userId, _date, _category, _location, _address, _description);
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             content: Text(
-              'Bruker registrert:\nAv: $_createdBy\nType aktivitet:$_category\nHvor: $_location, $_address'
+              'Bruker registrert:\nAv: $_userId\nType aktivitet:$_category\nHvor: $_location, $_address'
             ),
           );
         },

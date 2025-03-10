@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 
+// import from screens/
 import 'screens/home.dart';
 
 void main() {
@@ -26,12 +26,8 @@ class MakkerApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellow),
         useMaterial3: true,
       ),
-      home: const HomePage(title: 'Finn din makker ❤️👥'),
+      home: const HomePage(title: '👥 Makker'),
     );
-
   }
 
-  // For DEV:
-  Future<void> deleteDatabase(String path) =>
-    databaseFactory.deleteDatabase(path);
 }
