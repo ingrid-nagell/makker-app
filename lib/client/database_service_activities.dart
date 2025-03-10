@@ -12,7 +12,7 @@ class DatabaseServiceActivities {
   final String _activityTableName = 'activities';
 
   final String _activitiesId = 'id';
-  final String _activitiesCreatedBy = 'created_by';
+  final String _activitiesCreatedBy = 'createdBy';
   final String _activitiesDate = 'date';
   final String _activitiesCategory = 'category';
   final String _activitiesLocation = 'location';
@@ -94,7 +94,7 @@ class DatabaseServiceActivities {
     return [
       for (final {
           'id': id as int,
-          'created_by': created_by as String,
+          'created_by': createdBy as String,
           'date': date as String,
           'category': category as String,
           'location': location as String,
@@ -104,7 +104,7 @@ class DatabaseServiceActivities {
           } in activities)
         Activity(
           id: id,
-          createdBy: created_by,
+          createdBy: createdBy,
           date: date,
           category: category,
           location: location,

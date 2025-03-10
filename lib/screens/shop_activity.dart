@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 // Clients:
 import 'package:makker_app/client/database_service_activities.dart';
 
-// Models:
-import 'package:makker_app/models/activities.dart';
-
 // Widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
 
@@ -73,59 +70,60 @@ class _ShopActivityState extends State<ShopActivity> {
     required String description,
   }) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10.0),
+      margin: const EdgeInsets.symmetric(horizontal: 20.0),
       width: 500,
       height: 200,
-      color: const Color.fromRGBO(243, 208, 33, 1),
+      color: const Color.fromARGB(255, 197, 215, 184),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              title,
-              style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 20),
-            ),
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              date,
-              style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              description,
-              style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: ElevatedButton(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          title,
+          style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 20),
+        ),
+        ),
+        Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          date,
+          style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
+        ),
+        ),
+        Align(
+        alignment: Alignment.center,
+        child: Text(
+          description,
+          style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
+        ),
+        ),
+        Align(
+        alignment: Alignment.bottomRight,
+        child: ElevatedButton(
+          onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+            return AlertDialog(
+            title: const Text('Påmelding'),
+            content: const Text('✔️ Du er nå påmeldt på denne aktiviteten.'),
+            actions: <Widget>[
+              TextButton(
+              child: const Text('OK'),
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Påmelding'),
-                    content: const Text('✔️ Du er nå påmeldt på denne aktiviteten.'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('OK'),
-                        onPressed: () {
-                        Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                  },
-                );
-              }, child: const Text('Meld interesse 👋'),
-            ),
-          ),
-        ],
+              Navigator.of(context).pop();
+              },
+              ),
+            ],
+            );
+            },
+          );
+          }, child: const Text('Meld interesse 👋'),
+        ),
+        ),
+      ],
       ),
     );
   }

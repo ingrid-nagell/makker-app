@@ -23,15 +23,15 @@ class _MyActivities extends State<MyActivities> {
             children: [
               const SizedBox(height: 20),
               _buildActivityCard(
-              title: 'Søndagstur til Varden',
-              date: 'Søndag 09.03.2025. Kl. 10:00.',
-              description: 'Hvor møtes vi?',
+                title: 'Søndagstur til Varden',
+                date: 'Søndag 09.03.2025. Kl. 10:00.',
+                description: '✉️ Hvor møtes vi? - Lena',
               ),
               const SizedBox(height: 20),
               _buildActivityCard(
-              title: 'Klatreøkt',
-              date: 'Mandag 10.03.2025. Kl. 10:00.',
-              description: 'Katrine vil være din makker!',
+                title: 'Klatreøkt',
+                date: 'Mandag 10.03.2025. Kl. 10:00.',
+                description: '✉️ Katrine vil være din makker!',
               ),
               const SizedBox(height: 20),
               // Divider, put old activities below
@@ -68,7 +68,7 @@ class _MyActivities extends State<MyActivities> {
         padding: const EdgeInsets.all(16.0),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(243, 208, 33, 1),
+          color: Color.fromARGB(255, 209, 219, 223),
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Column(

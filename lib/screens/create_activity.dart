@@ -46,7 +46,7 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
       appBar: const AppBarNav(title: 'Registrer ny aktivitet'),
       body: Form(
         key: _formKey, // Associate the form key with this Form widget
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
@@ -65,34 +65,37 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
                 },
               ),
               DropdownButtonFormField(
-                decoration: const InputDecoration(labelText: 'Kategori'),
+                decoration: const InputDecoration(labelText: 'Type aktivitet'),
                 // TODO: Change to .map function
                 items: const [
                   DropdownMenuItem(value: 'Innendørsklatring',          child: Text('🧗Innendørsklatring')),
+                  DropdownMenuItem(value: 'Innendørsklatring: Buldring',child: Text('🧗Innendørsklatring: Buldring')),
                   DropdownMenuItem(value: 'Innendørsklatring: Led',     child: Text('🧗Innendørsklatring: Led')),
                   DropdownMenuItem(value: 'Innendørsklatring: Topptau', child: Text('🧗Innendørsklatring: Topptau')),
-                  DropdownMenuItem(value: 'Innendørsklatring: Buldring',child: Text('🧗Innendørsklatring: Buldring')),
-                  DropdownMenuItem(value: 'Kano/kajakk',                child: Text('🛶Kano/kajakk/båt')),
-                  DropdownMenuItem(value: 'Lagsport: Fotball',          child: Text('⚽Lagsport: Fotball')),
+                  DropdownMenuItem(value: 'Kano/kajakk',                child: Text('🛶Kano/kajakk')),
                   DropdownMenuItem(value: 'Lagsport: Basketball',       child: Text('🏀Lagsport: Basketball')),
-                  DropdownMenuItem(value: 'Lagsport: Volleyball',       child: Text('🏐Lagsport: Volleyball')),
+                  DropdownMenuItem(value: 'Lagsport: Fotball',          child: Text('⚽Lagsport: Fotball')),
                   DropdownMenuItem(value: 'Lagsport: Håndball',         child: Text('🤾‍♂️Lagsport: Håndball')),
+                  DropdownMenuItem(value: 'Lagsport: Volleyball',       child: Text('🏐Lagsport: Volleyball')),
                   DropdownMenuItem(value: 'Løping',                     child: Text('🏃‍♀️Løping')),
+                  DropdownMenuItem(value: 'Ski: Alpint',                child: Text('⛷️Ski: Alpint')),
                   DropdownMenuItem(value: 'Ski: Langrenn',              child: Text('⛷️Ski: Langrenn')),
                   DropdownMenuItem(value: 'Ski: Topptur',               child: Text('⛷️Ski: Topptur')),
-                  DropdownMenuItem(value: 'Ski: Alpint',                child: Text('⛷️Ski: Alpint')),
+                  DropdownMenuItem(value: 'Seiling',                    child: Text('⛵Seiling')),
                   DropdownMenuItem(value: 'Svømming',                   child: Text('🏊‍♀️Svømming')),
                   DropdownMenuItem(value: 'Sykkel: Landeveg',           child: Text('🚲Sykkel: Landeveg')),
                   DropdownMenuItem(value: 'Sykkel: Terreng',            child: Text('🚲Sykkel: Terreng')),
                   DropdownMenuItem(value: 'Treningsøkt',                child: Text('🏋️Treningsøkt')),
-                  DropdownMenuItem(value: 'Båltur',                     child: Text('🔥Til fots: Båltur')),
-                  DropdownMenuItem(value: 'Fjelltur',                   child: Text('⛰️Til fots: Fjelltur')),
-                  DropdownMenuItem(value: 'Tur',                        child: Text('🚶‍♀️Til fots: Gå tur')),
+                  DropdownMenuItem(value: 'Til fots: Båltur',           child: Text('🔥Til fots: Båltur')),
+                  DropdownMenuItem(value: 'Til fots: Fjelltur',         child: Text('⛰️Til fots: Fjelltur')),
+                  DropdownMenuItem(value: 'Til fots: Gå tur',           child: Text('🚶‍♀️Til fots: Gå tur')),
                   DropdownMenuItem(value: 'Telttur',                    child: Text('🏕️Til fots: Telttur')),
                   DropdownMenuItem(value: 'Utendørsklatring',           child: Text('🧗‍♀️Utendørsklatring')),
+                  DropdownMenuItem(value: 'Utendørsklatring: Buldring', child: Text('🧗‍♀️Utendørsklatring: Buldring')),
+                  DropdownMenuItem(value: 'Utendørsklatring: Isklatring',child: Text('🧗‍♀️Isklatring')),
                   DropdownMenuItem(value: 'Utendørsklatring: Sport',    child: Text('🧗‍♀️Utendørsklatring: Sport')),
                   DropdownMenuItem(value: 'Utendørsklatring: Trad',     child: Text('🧗‍♀️Utendørsklatring: Trad')),
-                  DropdownMenuItem(value: 'Utendørsklatring: Buldring', child: Text('🧗‍♀️Utendørsklatring: Buldring')),
+                  DropdownMenuItem(value: 'Annet',                      child: Text('Annet')),
                 ],
                 onChanged: (value) {
                   _category = value!; // Save the entered name

@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 
-// from /modules:
-import 'package:makker_app/screens/login.dart';
-import 'package:makker_app/screens/register_user.dart';
+// from /models:
+import 'package:makker_app/models/users.dart';
+
+// from /screens:
+import 'package:makker_app/screens/my_activities.dart';
+import 'package:makker_app/screens/shop_activity.dart';
+import 'package:makker_app/screens/create_activity.dart';
 
 // from /widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
+
+class MyPage extends StatefulWidget {
+  const MyPage({super.key, required this.title, required this.user});
   final String title;
+  final User user;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MyPage> createState() => _MyPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,40 +32,46 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           // Title
-          Padding(
-          padding: const EdgeInsets.only(top: 25.0),
-          child: Text(
-            'Velkommen til Makker ❤️💪',
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 25.0, bottom: 25),
+              child: Text(
+                'Velkommen til Makker,\n${widget.user.firstname} ❤️💪',
+                style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center,
+              ),
+            ),
 
-          const Padding(padding: EdgeInsets.all(16.0)),
+          //TODO: add cards showing the next two activities
 
-          // Buttons
-          ElevatedButton(
-          style: ElevatedButton.styleFrom(),
+          TextButton(
+          style: TextButton.styleFrom(),
           onPressed: () {
             Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const LogInForm()),
+            MaterialPageRoute(builder: (context) => const MyActivities()),
             );
           },
-          child: const Text('Logg inn'),
+            child: const Text('📅 Mine aktiviteter (2)'),
           ),
 
-          const Padding(padding: EdgeInsets.all(10.0)),
-
-          ElevatedButton(
-          style: ElevatedButton.styleFrom(),
+          TextButton(
+            style: TextButton.styleFrom(),
+            onPressed: () {
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ShopActivity()),
+            );
+            },
+            child: const Text('🏀 Finn din neste aktivitet'),
+          ),
+          TextButton(
+          style: TextButton.styleFrom(),
           onPressed: () {
             Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => RegisterUserForm()),
+            MaterialPageRoute(builder: (context) => const CreateActivityForm()),
             );
-          },
-          // Navigate to second route when tapped.
-          child: const Text('Registrer ny bruker'),
+            },
+            child: const Text('🕺🕺Finn en makker'),
           ),
 
           const Padding(padding: EdgeInsets.all(16.0)),
@@ -105,6 +117,7 @@ class _HomePageState extends State<HomePage> {
             'All rights reserved © ${DateTime.now().year} Makker App',
             style: Theme.of(context).textTheme.bodySmall,
             ),
+
         ],
         ),
       ),

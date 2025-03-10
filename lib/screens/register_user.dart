@@ -26,23 +26,46 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
   String _password = '';
 
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     // Check if the form is valid
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save(); // Save the form data
       // You can perform actions with the form data here and extract the details
-      //save data here:
-      _databaseService.addUser(_firstname, _lastname, _email, _password);
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text(
-              'Bruker registrert:\nNavn: $_firstname $_lastname\nE-post: $_email\nPassord: $_password'
-            ),
-          );
-        },
-      );
+      // Check if the user is already in the database
+
+       _usersList();
+      if (await _databaseService.isUserInDatabase(_email) == false) {
+        // Save data here
+        _databaseService.addUser(_firstname, _lastname, _email, _password);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(
+                'Bruker registrert:\nNavn: $_firstname $_lastname\nE-post: $_email\nPassord: $_password'
+              ),
+            );
+          },
+        );
+      } else {
+        // Show an error message if the user is already in the database
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                content: const Text('Bruker med denne e-postadressen er allerede registrert.'),
+                actions: [
+                TextButton(
+                  onPressed: () {
+                  // Forgot password action
+                  },
+                  child: const Text('Glemt passord'),
+                ),
+                ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -53,7 +76,7 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
       body: Form(
         key: _formKey, // Associate the form key with this Form widget
         child: Padding(
-          padding: const EdgeInsets.only(left: 100, right: 100, top: 25), // Add padding on left and right side
+          padding: const EdgeInsets.only(left: 50, right: 50, top: 25), // Add padding on left and right side
           child: Column(
             children: <Widget>[
               TextFormField(
@@ -122,5 +145,12 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
         ),
       ),
     );
+  }
+
+  // currently only used to check what data is stored in the database
+  Widget _usersList() {
+    return FutureBuilder(future: _databaseService.getUsers(), builder: (context, snapshot) {
+      return Container();
+    });
   }
 }
