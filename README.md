@@ -13,3 +13,7 @@ Makker (english: buddy) is an app that will help outdoor enthusiasts finding the
 ## FLutter cmd:
 * flutter doctor
 * flutter pub get
+
+
+https://github.com/user-attachments/assets/e493e370-a23d-465a-a796-f80349a02e35
+
