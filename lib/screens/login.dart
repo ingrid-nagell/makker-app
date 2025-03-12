@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:makker_app/client/user_provider.dart';
 
 // from /widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
@@ -6,6 +7,7 @@ import 'package:makker_app/screens/my_page.dart';
 
 // from /client:
 import 'package:makker_app/client/database_service_users.dart';
+import 'package:provider/provider.dart';
 
 class LogInForm extends StatefulWidget {
   const LogInForm({super.key});
@@ -30,12 +32,11 @@ class _LogInFormState extends State<LogInForm> {
       print('Email: $_email'); // Print the email
       print('PWD: $_password'); // Print the password
 
-
       if (await _databaseService.isUserInDatabase(_email) == true) {
 
-        var user = await _databaseService.getUser(_email);
+        var currentUser = await _databaseService.getUser(_email);
 
-        if (user.password != _password) {
+        if (currentUser.password != _password) {
           showDialog(
             context: context,
             builder: (context) {
@@ -46,9 +47,12 @@ class _LogInFormState extends State<LogInForm> {
           );
           return;
         } else {
+          final userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.setUser(currentUser);
+
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyPage(title: 'Min side', user: user)),
+            MaterialPageRoute(builder: (context) => MyPage(title: 'Min side')),
           );
         }
       } else {

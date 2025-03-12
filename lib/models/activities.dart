@@ -1,10 +1,12 @@
 class Activity {
   final int id;
-  final String userId;
+  final int userId;
   final String date;
   final String category;
+  final String type;
   final String location;
-  final String address;
+  final String rendezvous;
+  final String title;
   final String description;
 
   Activity({
@@ -12,8 +14,10 @@ class Activity {
     required this.userId,
     required this.date,
     required this.category,
+    required this.type,
     required this.location,
-    required this.address,
+    required this.rendezvous,
+    required this.title,
     required this.description,
   });
 }

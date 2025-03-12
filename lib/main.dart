@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// import from client/:
+import 'client/user_provider.dart';
 
 // import from screens/
 import 'screens/home.dart';
 
+// import from dev
+// import 'dev/delete_db.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized;
-  runApp(const MakkerApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: const MakkerApp(),
+    ),
+  );
 }
 
 class MakkerApp extends StatelessWidget {
@@ -29,5 +41,4 @@ class MakkerApp extends StatelessWidget {
       home: const HomePage(title: '👥 Makker'),
     );
   }
-
 }

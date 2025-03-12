@@ -10,7 +10,7 @@ import 'package:sqflite/sqflite.dart';
 
 void main() {
   // deleteDatabase('users.db');
-  deleteDatabase('activities.db');
+  deleteDatabase('/data/user/0/com.example.makker_app/databases/activities.db');
 }
 
 Future<void> deleteDatabase(String path) =>

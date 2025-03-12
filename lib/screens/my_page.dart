@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:makker_app/client/user_provider.dart';
 
 // from /models:
-import 'package:makker_app/models/users.dart';
 
 // from /screens:
 import 'package:makker_app/screens/my_activities.dart';
@@ -10,12 +10,12 @@ import 'package:makker_app/screens/create_activity.dart';
 
 // from /widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
+import 'package:provider/provider.dart';
 
 
 class MyPage extends StatefulWidget {
-  const MyPage({super.key, required this.title, required this.user});
+  const MyPage({super.key, required this.title});
   final String title;
-  final User user;
 
   @override
   State<MyPage> createState() => _MyPageState();
@@ -24,6 +24,8 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
+    final currentUser = Provider.of<UserProvider>(context).user;
+
     return Scaffold(
       appBar: AppBarNav(title: widget.title),
       body: SingleChildScrollView(
@@ -35,7 +37,7 @@ class _MyPageState extends State<MyPage> {
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 25.0, bottom: 25),
               child: Text(
-                'Velkommen til Makker,\n${widget.user.firstname} ❤️💪',
+                'Velkommen til Makker,\n${currentUser?.firstname} ❤️💪',
                 style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center,
               ),
             ),
@@ -56,9 +58,9 @@ class _MyPageState extends State<MyPage> {
           TextButton(
             style: TextButton.styleFrom(),
             onPressed: () {
-            Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ShopActivity()),
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ShopActivity()),
             );
             },
             child: const Text('🏀 Finn din neste aktivitet'),
@@ -66,9 +68,9 @@ class _MyPageState extends State<MyPage> {
           TextButton(
           style: TextButton.styleFrom(),
           onPressed: () {
-            Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CreateActivityForm()),
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreateActivityForm()),
             );
             },
             child: const Text('🕺🕺Finn en makker'),

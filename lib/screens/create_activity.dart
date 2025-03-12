@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:makker_app/client/database_service_activities.dart';
+import 'package:makker_app/client/user_provider.dart';
 
 // from widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 class CreateActivityForm extends StatefulWidget {
   const CreateActivityForm({super.key});
@@ -14,24 +17,54 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final DatabaseServiceActivities _databaseService = DatabaseServiceActivities.instance;
 
-  int _userId = 123;
   String _date = '';
   String _category = '';
+  String _type = '';
   String _location = '';
-  String _address = '';
+  String _rendezvous = '';
+  String _title = '';
   String _description = '';
+  int _userId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final currentUser = Provider.of<UserProvider>(this.context, listen: false).user;
+    setState(() {
+      _userId = currentUser?.id ?? 0;
+    });
+  }
 
   void _newActivity() {
     // Check if the form is valid
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _databaseService.addActivity(_userId, _date, _category, _location, _address, _description);
+      _databaseService.addActivity(
+        _userId,
+        _date,
+        _category,
+        _type,
+        _location,
+        _rendezvous,
+        _title,
+        _description
+      );
       showDialog(
-        context: context,
+        context: this.context,
         builder: (context) {
           return AlertDialog(
             content: Text(
-              'Bruker registrert:\nAv: $_userId\nType aktivitet:$_category\nHvor: $_location, $_address'
+              """Aktivitet registrert:\n
+              Av: $_userId,
+              Dato: $_date,
+              Type aktivitet:$_category,
+              Åpen for: $_type,
+              Tittel: $_title,
+              Hvor: $_location,
+              Oppmøtested: $_rendezvous,
+              Beskrivelse: $_description
+              """
             ),
           );
         },
@@ -49,6 +82,8 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
+
+              // Date
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Dato'), // Label for the email field
                 validator: (value) {
@@ -63,6 +98,8 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
                   _date = value!; // Save the entered email
                 },
               ),
+
+              // Category
               DropdownButtonFormField(
                 decoration: const InputDecoration(labelText: 'Type aktivitet'),
                 // TODO: Change to .map function
@@ -100,6 +137,8 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
                   _category = value!; // Save the entered name
                 },
               ),
+
+              // Deltagelsesform
               DropdownButtonFormField(
                 decoration: const InputDecoration(labelText: 'Deltagelsesform'),
                 items: const [
@@ -113,9 +152,26 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
                   return null;
                 },
                 onChanged: (value) {
-                  _category = value!; // Save the entered name
+                  _type = value!; // Save the entered name
                 },
-                ),
+              ),
+
+              // Title
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Tittel'), // Label for the name field
+                validator: (value) {
+                  // Validation function for the name field
+                  if (value!.isEmpty) {
+                    return 'Vennligst oppgi en tittel for arrangementet.'; // Return an error message if the name is empty
+                  }
+                  return null; // Return null if the name is valid
+                },
+                onSaved: (value) {
+                  _title = value!; // Save the entered name
+                },
+              ),
+
+              // Location
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Sted'), // Label for the name field
                 validator: (value) {
@@ -129,6 +185,8 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
                   _location = value!; // Save the entered name
                 },
               ),
+
+              // Oppmøte
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Oppmøteadresse'), // Label for the email field
                 validator: (value) {
@@ -140,9 +198,11 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
                   return null; // Return null if the email is valid
                 },
                 onSaved: (value) {
-                  _address = value!;
+                  _rendezvous = value!;
                 },
               ),
+
+              // Desc.
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Beskrivelse'), // Label for the email field
                 validator: (value) {
