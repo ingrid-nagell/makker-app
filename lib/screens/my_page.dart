@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:makker_app/client/user_provider.dart';
+import 'package:makker_app/screens/home.dart';
 
 // from /models:
 
@@ -14,8 +15,7 @@ import 'package:provider/provider.dart';
 
 
 class MyPage extends StatefulWidget {
-  const MyPage({super.key, required this.title});
-  final String title;
+  const MyPage({super.key});
 
   @override
   State<MyPage> createState() => _MyPageState();
@@ -27,7 +27,7 @@ class _MyPageState extends State<MyPage> {
     final currentUser = Provider.of<UserProvider>(context).user;
 
     return Scaffold(
-      appBar: AppBarNav(title: widget.title),
+      appBar: const AppBarNav(title: "Min side", isLoggedIn: true),
       body: SingleChildScrollView(
       child: Center(
         child: Column(
@@ -81,41 +81,53 @@ class _MyPageState extends State<MyPage> {
           // Picture Carousel
           _buildImageCarousel(),
 
-          const Padding(padding: EdgeInsets.all(16.0)),
+          const Padding(padding: EdgeInsets.all(5.0)),
+
+          TextButton(
+            style: TextButton.styleFrom(),
+            onPressed: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            },
+            child: const Text('Logg ut'),
+            ),
 
           // About Makker
           TextButton(
-          style: TextButton.styleFrom(),
-          onPressed: () {
-            showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Om Makker'),
-              content: const Text(
-              'Makker hjelper deg å finne din neste turkamerat eller klatrepartner. (...)'
+            style: TextButton.styleFrom(),
+            onPressed: () {
+              showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Om Makker'),
+                content: const Text(
+                'Makker hjelper deg å finne din neste turkamerat eller klatrepartner. (...)'
+                ),
+                actions: [
+                TextButton(
+                  child: const Text('Kontakt oss'),
+                  onPressed: () {
+                  // Text('email here');
+                  },
+                ),
+                TextButton(
+                  onPressed: () {
+                  Navigator.pop(context);
+                  },
+                  child: const Text('Tilbake'),
+                )
+                ]
               ),
-              actions: [
-              TextButton(
-                child: const Text('Kontakt oss'),
-                onPressed: () {
-                // Text('email here');
-                },
-              ),
-              TextButton(
-                onPressed: () {
-                Navigator.pop(context);
-                },
-                child: const Text('Tilbake'),
-              )
-              ]
-            ),
-            );
-          },
-          child: const Text('Om Makker'),
+              );
+            },
+            child: const Text('Om Makker'),
           ),
-            const Padding(padding: EdgeInsets.all(16.0)),
 
-            Text(
+          const Padding(padding: EdgeInsets.all(10.0)),
+
+          Text(
             'All rights reserved © ${DateTime.now().year} Makker App',
             style: Theme.of(context).textTheme.bodySmall,
             ),

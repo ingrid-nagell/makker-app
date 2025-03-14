@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:makker_app/client/database_service_activities.dart';
 import 'package:makker_app/client/user_provider.dart';
+import 'package:makker_app/screens/my_activities.dart';
 
 // from widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
@@ -16,6 +17,7 @@ class CreateActivityForm extends StatefulWidget {
 class _CreateActivityFormState extends State<CreateActivityForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final DatabaseServiceActivities _databaseService = DatabaseServiceActivities.instance;
+  late final currentUser;
 
   String _date = '';
   String _category = '';
@@ -30,7 +32,8 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
   void initState() {
     super.initState();
 
-    final currentUser = Provider.of<UserProvider>(this.context, listen: false).user;
+    currentUser = Provider.of<UserProvider>(this.context, listen: false).user;
+
     setState(() {
       _userId = currentUser?.id ?? 0;
     });
@@ -66,6 +69,26 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
               Beskrivelse: $_description
               """
             ),
+            actions: [
+                TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const CreateActivityForm()),
+                  );
+                },
+                child: const Text('Registrer ny aktivitet'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyActivities()),
+                  );
+                },
+                child: const Text('Se mine aktiviteter'),
+              ),
+            ],
           );
         },
       );
@@ -74,8 +97,9 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
 
   @override
   Widget build(BuildContext context) {
+    print('currentUser: $currentUser');
     return Scaffold(
-      appBar: const AppBarNav(title: 'Registrer ny aktivitet'),
+      appBar: AppBarNav(title: 'Registrer ny aktivitet',  isLoggedIn: true),
       body: Form(
         key: _formKey, // Associate the form key with this Form widget
         child: SingleChildScrollView(
@@ -85,17 +109,32 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
 
               // Date
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Dato'), // Label for the email field
+                decoration: const InputDecoration(labelText: 'Dato'), // Label for the date field
+                readOnly: true, // Prevents the user from manually editing the date
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    setState(() {
+                    _date = "${pickedDate.day.toString().padLeft(2, '0')}.${pickedDate.month.toString().padLeft(2, '0')}.${pickedDate.year}"; // Format the date as dd.mm.yyyy
+                  });
+                  }
+                },
+                controller: TextEditingController(text: _date),
                 validator: (value) {
                   // Validation function for the email field
                   if (value!.isEmpty) {
                     return 'Vennligst oppgi ett gyldig dato.'; // Return an error message if the email is empty
                   }
                   // You can add more complex validation logic here
-                  return null; // Return null if the email is valid
+                  return null;
                 },
                 onSaved: (value) {
-                  _date = value!; // Save the entered email
+                  _date = value!;
                 },
               ),
 
@@ -133,6 +172,11 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
                   DropdownMenuItem(value: 'Utendørsklatring: Trad',     child: Text('🧗‍♀️Utendørsklatring: Trad')),
                   DropdownMenuItem(value: 'Annet',                      child: Text('Annet')),
                 ],
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                  return 'Vennligst velg en aktivitetstype.';
+                  }
+                },
                 onChanged: (value) {
                   _category = value!; // Save the entered name
                 },

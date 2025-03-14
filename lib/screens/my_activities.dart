@@ -1,8 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:makker_app/client/database_service_activities.dart';
+// import 'package:makker_app/client/database_service_attendees.dart';
+import 'package:makker_app/client/user_provider.dart';
+import 'package:makker_app/models/activities.dart';
+import 'package:makker_app/models/users.dart';
 
 // from widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
 import 'package:makker_app/screens/activity_history.dart';
+import 'package:provider/provider.dart';
 
 class MyActivities extends StatefulWidget {
   const MyActivities({super.key});
@@ -12,43 +20,63 @@ class MyActivities extends StatefulWidget {
 }
 
 class _MyActivities extends State<MyActivities> {
+  final DatabaseServiceActivities _databaseServiceActivities = DatabaseServiceActivities.instance;
+  // late Future<List<Activity>> myActivities;
+  late final User? currentUser;
+  int _userId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    currentUser = Provider.of<UserProvider>(context, listen: false).user;
+
+    setState(() {
+      _userId = currentUser?.id ?? 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("USERID: $_userId");
     return Scaffold(
-      appBar: const AppBarNav(title: 'Mine aktiviteter'),
-      body: SingleChildScrollView(
+      appBar: const AppBarNav(title: 'Mine aktiviteter', isLoggedIn: true),
+      body: Align(
+        alignment: Alignment.topCenter,
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(top: 20.0),
           child: Column(
             children: [
-              const SizedBox(height: 20),
-              _buildActivityCard(
-                title: 'Søndagstur til Varden',
-                date: 'Søndag 09.03.2025. Kl. 10:00.',
-                description: '✉️ Hvor møtes vi? - Lena',
-              ),
-              const SizedBox(height: 20),
-              _buildActivityCard(
-                title: 'Klatreøkt',
-                date: 'Mandag 10.03.2025. Kl. 10:00.',
-                description: '✉️ Katrine vil være din makker!',
-              ),
-              const SizedBox(height: 20),
-              // Divider, put old activities below
-              const Divider(
-              color: Color.fromARGB(255, 68, 67, 67),
-              thickness: 1,
-              ),
-              const SizedBox(height: 20),
-
               const Text(
-                'Tidligere aktiviteter:',
+                'Mine aktiviteter',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
                 ),
               ),
+              _buildMyActivitiesList(_databaseServiceActivities.getMyActivities(_userId)),
+              const Divider(
+                color: Color.fromARGB(255, 170, 52, 52),
+                height: 20,
+                thickness: 1,
+                indent: 20,
+                endIndent: 20,
+              ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ActivityHistory(activityName: 'Tidligere aktiviteter')),
+                );
+              },
+              child: const Text(
+                'Tidligere aktiviteter',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color.fromARGB(255, 14, 59, 95),
+                ),
+              ),
+            ),
             ],
           ),
         ),
@@ -56,7 +84,53 @@ class _MyActivities extends State<MyActivities> {
     );
   }
 
-  Widget _buildActivityCard({required String title, required String date, required String description}) {
+  Widget _buildMyActivitiesList(function) {
+    return Expanded(
+      child: FutureBuilder<List<Activity>>(
+        future: function,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Text('Ingen aktiviteter funnet.');
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final activity = snapshot.data![index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: _buildActivityCard(
+                    activityId: activity.id,
+                    category: activity.category,
+                    title: activity.title,
+                    description: activity.description,
+                    date: activity.date,
+                    location: activity.location,
+                    type: activity.type,
+                    userId: activity.userId,
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildActivityCard({
+    required int activityId,
+    required String category,
+    required String title,
+    required String description,
+    required String date,
+    required String location,
+    required String type,
+    required int userId,
+  }) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -65,10 +139,11 @@ class _MyActivities extends State<MyActivities> {
                 );
       },
       child: Container(
-        padding: const EdgeInsets.all(16.0),
-        width: double.infinity,
+        padding: const EdgeInsets.all(20.0),
+        margin: const EdgeInsets.symmetric(horizontal: 20.0),
+        constraints: const BoxConstraints(minWidth: 500),
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 209, 219, 223),
+          color: const Color.fromARGB(255, 209, 219, 223),
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Column(

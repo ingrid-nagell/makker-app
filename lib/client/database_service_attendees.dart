@@ -5,8 +5,6 @@ import 'package:path/path.dart';
 // from /models:
 import 'package:makker_app/models/attendees.dart';
 
-// https://www.youtube.com/watch?v=pFctmsTDoa0
-//17m
 
 class DatabaseServiceAttendees {
   final String _attendeesTableName = 'attendees';

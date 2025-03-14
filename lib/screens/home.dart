@@ -8,8 +8,7 @@ import 'package:makker_app/screens/register_user.dart';
 import 'package:makker_app/widgets/app_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
-  final String title;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -19,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNav(title: widget.title),
+      appBar: AppBarNav(title: "👥 Makker", isLoggedIn: false),
       body: SingleChildScrollView(
       child: Center(
         child: Column(

@@ -35,6 +35,7 @@ class _LogInFormState extends State<LogInForm> {
       if (await _databaseService.isUserInDatabase(_email) == true) {
 
         var currentUser = await _databaseService.getUser(_email);
+        print(currentUser);
 
         if (currentUser.password != _password) {
           showDialog(
@@ -52,7 +53,7 @@ class _LogInFormState extends State<LogInForm> {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MyPage(title: 'Min side')),
+            MaterialPageRoute(builder: (context) => const MyPage()),
           );
         }
       } else {
@@ -72,7 +73,7 @@ class _LogInFormState extends State<LogInForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarNav(title: 'Logg inn'),
+      appBar: const AppBarNav(title: 'Logg inn', isLoggedIn: false),
       body: Form(
         key: _formKey, // Associate the form key with this Form widget
         child: Padding(
@@ -99,23 +100,24 @@ class _LogInFormState extends State<LogInForm> {
               ),
 
               // Email field
-              Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: TextFormField(
-                decoration: const InputDecoration(labelText: 'Passord'), // Label for the email field
+                Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: TextFormField(
+                decoration: const InputDecoration(labelText: 'Passord'), // Label for the password field
+                obscureText: true, // Hide the password text
                 validator: (value) {
-                // Validation function for the email field
+                // Validation function for the password field
                 if (value!.isEmpty) {
-                  return 'Skriv inn ditt passord.'; // Return an error message if the email is empty
+                  return 'Skriv inn ditt passord.'; // Return an error message if the password is empty
                 }
                 // You can add more complex validation logic here
-                return null; // Return null if the email is valid
+                return null; // Return null if the password is valid
                 },
                 onSaved: (value) {
-                _password = value!; // Save the entered email
+                _password = value!; // Save the entered password
                 },
-              ),
-              ),
+                ),
+                ),
 
               const SizedBox(height: 20.0),
 
@@ -123,6 +125,31 @@ class _LogInFormState extends State<LogInForm> {
               ElevatedButton(
                 onPressed: _submitForm, // Call the _submitForm function when the button is pressed
                 child: const Text('Submit'), // Text on the button
+              ),
+
+              const SizedBox(height: 20.0),
+              TextButton(
+                onPressed: () {
+                  // Handle forgot password action
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Glemt passord'),
+                        content: const Text('Vennligst kontakt support for å tilbakestille passordet ditt.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text('Glemt passord eller brukernavn'),
               ),
             ],
             ),

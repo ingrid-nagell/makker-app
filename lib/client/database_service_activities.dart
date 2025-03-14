@@ -20,6 +20,7 @@ class DatabaseServiceActivities {
   final String _activitiesRendezvous = 'rendezvous';
   final String _activitiesTitle = 'title';
   final String _activitiesDescription = 'description';
+  final String _activitiesIsActive = 'isActive';
 
   static Database? _db;
 
@@ -54,7 +55,8 @@ class DatabaseServiceActivities {
             $_activitiesLocation TEXT,
             $_activitiesRendezvous TEXT,
             $_activitiesTitle TEXT,
-            $_activitiesDescription TEXT
+            $_activitiesDescription TEXT,
+            $_activitiesIsActive TEXT
         )
         ''');
       },
@@ -83,13 +85,19 @@ class DatabaseServiceActivities {
         _activitiesRendezvous: rendezvous,
         _activitiesTitle: title,
         _activitiesDescription: description,
+        _activitiesIsActive: 'true',
       },
     );
   }
 
   Future<List<Activity>> getActivities() async {
     final db = await database;
-    final data = await db.query(_activityTableName);
+    final data = await db.query(
+      _activityTableName,
+      where: '$_activitiesIsActive = ?',
+      whereArgs: ['true'],
+      orderBy: '$_activitiesDate ASC',
+    );
     print(data);
 
     List<Activity> activities = data.map((e) => Activity(
@@ -102,7 +110,62 @@ class DatabaseServiceActivities {
       rendezvous: e['rendezvous'] as String,
       title:    e['title'] as String,
       description: e['description'] as String,
+      isActive: e['isActive'] as String,
       )).toList();
     return activities;
+  }
+
+  Future<List<String>> getUniqueActivityCategories() async {
+    final db = await database;
+    final data = await db.rawQuery('''
+      SELECT DISTINCT $_activitiesCategory
+      FROM $_activityTableName
+      WHERE $_activitiesIsActive = 'true'
+      ORDER BY $_activitiesCategory ASC
+    ''');
+    List<String> categories = data.map((e) => e[_activitiesCategory] as String).toList();
+    return categories;
+  }
+
+  Future<List<String>> getQueryActivities(String query) async {
+    final db = await database;
+    final data = await db.rawQuery(query);
+    List<String> types = data.map((e) => e[_activitiesType] as String).toList();
+    return types;
+  }
+
+  Future<List<Activity>> getMyActivities(int userId) async {
+    final db = await database;
+    final data = await db.query(
+      _activityTableName,
+      where: '$_activitiesUserId = ?',
+      whereArgs: [userId],
+      orderBy: '$_activitiesDate DESC',
+    );
+    print(data);
+
+    List<Activity> activities = data.map((e) => Activity(
+      id:       e['id'] as int,
+      userId:   e['userId'] as int,
+      date:     e['date'] as String,
+      category: e['category'] as String,
+      type:     e['type'] as String,
+      location: e['location'] as String,
+      rendezvous: e['rendezvous'] as String,
+      title:    e['title'] as String,
+      description: e['description'] as String,
+      isActive: e['isActive'] as String,
+      )).toList();
+    return activities;
+  }
+
+  Future<void> updateActivity(int id, String isActive) async {
+    final db = await database;
+    await db.update(
+      _activityTableName,
+      {_activitiesIsActive: isActive},
+      where: '$_activitiesId = ?',
+      whereArgs: [id],
+    );
   }
 }

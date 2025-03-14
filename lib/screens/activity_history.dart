@@ -24,7 +24,7 @@ class _ActivityHistoryState extends State<ActivityHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNav(title: widget.activityName),
+      appBar: AppBarNav(title: widget.activityName, isLoggedIn: true),
     );
   }
 }

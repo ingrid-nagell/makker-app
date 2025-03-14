@@ -24,7 +24,7 @@ class _ShopActivityState extends State<ShopActivity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarNav(title: 'Finn din neste aktivitet'),
+      appBar: const AppBarNav(title: 'Finn din neste aktivitet', isLoggedIn: true),
       body: Align(
         alignment: Alignment.topCenter,
         child: Padding(
@@ -58,6 +58,7 @@ class _ShopActivityState extends State<ShopActivity> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: _buildActivityCard(
+                        activityId: activity.id,
                         category: activity.category,
                         title: activity.title,
                         description: activity.description,
@@ -153,6 +154,7 @@ class _ShopActivityState extends State<ShopActivity> {
   }
 
   Widget _buildActivityCard({
+    required int activityId,
     required String category,
     required String title,
     required String description,
@@ -169,49 +171,89 @@ class _ShopActivityState extends State<ShopActivity> {
     return Container(
       padding: const EdgeInsets.all(20.0),
       margin: const EdgeInsets.symmetric(horizontal: 20.0),
-      width: 500,
-      height: 200,
-      color: const Color.fromARGB(255, 197, 215, 184),
-      child:
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 20),
-            ),
-            Text(
-              category,
-              style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
-            ),
-            Text(
-              "$location, dato: $date",
-              style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
-            ),
-            Text(
-              description,
-              style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-                child: currentUser?.id == userId ? AuthorWidget() : NotAuthorWidget(),
-                // Check for already deltager == true and create a new widget for it
-                ),
-          ],
+      constraints: const BoxConstraints(minWidth: 500),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 197, 215, 184),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+        title,
+        style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 20),
         ),
+        const SizedBox(height: 5),
+        Text(
+        category,
+        style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
+        ),
+        const SizedBox(height: 5),
+        Text(
+        "$location, dato: $date",
+        style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
+        ),
+        const SizedBox(height: 5),
+        Text(
+        description,
+        style: const TextStyle(color: Color.fromRGBO(51, 44, 54, 1), fontSize: 16),
+        ),
+        const SizedBox(height: 10),
+        Align(
+        alignment: Alignment.bottomRight,
+        child: currentUser?.id == userId ? AuthorWidget(databaseServiceActivities: _databaseServiceActivities, activityId: activityId) : NotAuthorWidget(),
+        ),
+      ],
+      ),
     );
   }
 }
 
 class AuthorWidget extends StatelessWidget {
-  const AuthorWidget({super.key});
+  final DatabaseServiceActivities databaseServiceActivities;
+  final int activityId;
+
+  const AuthorWidget({super.key, required this.databaseServiceActivities, required this.activityId});
 
   @override
   Widget build(BuildContext context) {
-    return
-    ElevatedButton(
-      onPressed: () {},
-      child: Text('Du er arrangør.')
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () {},
+          child: Text('Du er arrangør.'),
+        ),
+        TextButton(
+            onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Avlys arrangement'),
+                content: const Text('Er du sikker på du vil avlyse?'),
+                actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    databaseServiceActivities.updateActivity(activityId, "false");
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Ja, avlys'),
+                ),
+                ElevatedButton(
+                  child: const Text('Avbryt'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ],
+              );
+              },
+            );
+          },
+          child: Text('Avlys arrangement'),
+        ),
+      ],
     );
   }
 }

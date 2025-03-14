@@ -8,6 +8,7 @@ class Activity {
   final String rendezvous;
   final String title;
   final String description;
+  final String isActive;
 
   Activity({
     required this.id,
@@ -19,5 +20,6 @@ class Activity {
     required this.rendezvous,
     required this.title,
     required this.description,
+    required this.isActive,
   });
 }

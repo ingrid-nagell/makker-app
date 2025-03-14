@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// import 'package:sqflite/sqflite.dart';
 
 // import from client/:
 import 'client/user_provider.dart';
@@ -8,7 +9,7 @@ import 'client/user_provider.dart';
 import 'screens/home.dart';
 
 // import from dev
-// import 'dev/delete_db.dart';
+import 'dev/delete_db.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized;
@@ -38,7 +39,7 @@ class MakkerApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellow),
         useMaterial3: true,
       ),
-      home: const HomePage(title: '👥 Makker'),
+      home: const HomePage(),
     );
   }
 }

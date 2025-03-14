@@ -6,6 +6,9 @@ import 'package:makker_app/client/database_service_users.dart';
 // from /widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
 
+// from /screens:
+import 'package:makker_app/screens/login.dart';
+
 
 class RegisterUserForm extends StatefulWidget {
   const RegisterUserForm({super.key});
@@ -42,8 +45,29 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
           builder: (context) {
             return AlertDialog(
               content: Text(
-                'Bruker registrert:\nNavn: $_firstname $_lastname\nE-post: $_email\nPassord: $_password'
+'''
+Bruker registrert:
+    Navn: $_firstname $_lastname
+    E-post: $_email
+'''
               ),
+              actions: <Widget>[
+                  TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LogInForm()),
+                    );
+                  },
+                  child: const Text('Logg inn'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Avbryt'),
+                ),
+              ],
             );
           },
         );
@@ -54,12 +78,21 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
           builder: (context) {
             return AlertDialog(
                 content: const Text('Bruker med denne e-postadressen er allerede registrert.'),
-                actions: [
+                actions: <Widget>[
+                  TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LogInForm()),
+                    );
+                  },
+                  child: const Text('Logg inn'),
+                ),
                 TextButton(
                   onPressed: () {
-                  // Forgot password action
+                    Navigator.pop(context);
                   },
-                  child: const Text('Glemt passord'),
+                  child: const Text('Avbryt'),
                 ),
                 ],
             );
@@ -72,7 +105,7 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarNav(title: 'Registrer ny bruker'),
+      appBar: const AppBarNav(title: 'Registrer ny bruker', isLoggedIn: false),
       body: Form(
         key: _formKey, // Associate the form key with this Form widget
         child: Padding(
@@ -119,20 +152,22 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
                   _email = value!; // Save the entered email
                 },
               ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Passord'), // Label for the email field
+                TextFormField(
+                decoration: const InputDecoration(labelText: 'Passord'), // Label for the password field
+                obscureText: true, // Hide the password input
                 validator: (value) {
-                  // Validation function for the email field
+                  // Validation function for the password field
                   if (value!.isEmpty) {
-                    return 'Vennligst oppgi ett gyldig passord.'; // Return an error message if the email is empty
+                  return 'Vennligst oppgi ett gyldig passord.'; // Return an error message if the password is empty
                   }
                   // You can add more complex validation logic here
-                  return null; // Return null if the email is valid
+                  return null; // Return null if the password is valid
                 },
                 onSaved: (value) {
-                  _password = value!; // Save the entered email
+                  _password = value!; // Save the entered password
                 },
               ),
+
               const SizedBox(height: 20.0),
               ElevatedButton(
                 child: const Text('Opprett bruker'), // Text on the button
