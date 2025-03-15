@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:makker_app/client/database_helper.dart';
 import 'package:makker_app/client/user_provider.dart';
+import 'package:makker_app/models/users.dart';
+import 'package:makker_app/screens/register_user.dart';
 
 // from /widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
 import 'package:makker_app/screens/my_page.dart';
 
 // from /client:
-import 'package:makker_app/client/database_service_users.dart';
+// import 'package:makker_app/client/database_service_users.dart';
 import 'package:provider/provider.dart';
 
 class LogInForm extends StatefulWidget {
@@ -18,7 +21,7 @@ class LogInForm extends StatefulWidget {
 
 class _LogInFormState extends State<LogInForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // A key for managing the form
-  final DatabaseServiceUsers _databaseService = DatabaseServiceUsers.instance;
+  final userManager = UserManager();
 
   String _email = ''; // Variable to store the entered name
   String _password = ''; // Variable to store the entered email
@@ -32,12 +35,12 @@ class _LogInFormState extends State<LogInForm> {
       print('Email: $_email'); // Print the email
       print('PWD: $_password'); // Print the password
 
-      if (await _databaseService.isUserInDatabase(_email) == true) {
+      if (await userManager.isUserInDatabase(_email) == true) {
 
-        var currentUser = await _databaseService.getUser(_email);
+        User? currentUser = await userManager.getUser(_email);
         print(currentUser);
 
-        if (currentUser.password != _password) {
+        if (currentUser?.password != _password) {
           showDialog(
             context: context,
             builder: (context) {
@@ -49,7 +52,7 @@ class _LogInFormState extends State<LogInForm> {
           return;
         } else {
           final userProvider = Provider.of<UserProvider>(context, listen: false);
-          userProvider.setUser(currentUser);
+          userProvider.setUser(currentUser as User);
 
           Navigator.push(
             context,
@@ -61,8 +64,25 @@ class _LogInFormState extends State<LogInForm> {
         showDialog(
           context: context,
           builder: (context) {
-            return const AlertDialog(
-              content: Text('Bruker med denne e-postadressen er ikke registrert.'),
+            return AlertDialog(
+              content: const Text('Bruker med denne e-postadressen er ikke registrert.'),
+              actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const RegisterUserForm()),
+              );
+            },
+            child: const Text('Registrer konto'),
+          ),
+              ],
             );
           },
         );

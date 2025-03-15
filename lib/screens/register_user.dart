@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:makker_app/client/database_helper.dart';
 
 // from /client:
-import 'package:makker_app/client/database_service_users.dart';
+// import 'package:makker_app/client/database_service_users.dart';
 
 // from /widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
@@ -20,7 +21,7 @@ class RegisterUserForm extends StatefulWidget {
 class _RegisterUserFormState extends State<RegisterUserForm> {
   // A key for managing the form:
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final DatabaseServiceUsers _databaseService = DatabaseServiceUsers.instance;
+  final userManager = UserManager();
 
   // Variables to store the entered data
   String _firstname = '';
@@ -36,10 +37,11 @@ class _RegisterUserFormState extends State<RegisterUserForm> {
       // You can perform actions with the form data here and extract the details
       // Check if the user is already in the database
 
-       _usersList();
-      if (await _databaseService.isUserInDatabase(_email) == false) {
+      //  _usersList();
+
+      if (await userManager.isUserInDatabase(_email) == false) {
         // Save data here
-        _databaseService.addUser(_firstname, _lastname, _email, _password);
+        userManager.createUser(_firstname, _lastname, _email, _password);
         showDialog(
           context: context,
           builder: (context) {
@@ -180,12 +182,5 @@ Bruker registrert:
         ),
       ),
     );
-  }
-
-  // currently only used to check what data is stored in the database
-  Widget _usersList() {
-    return FutureBuilder(future: _databaseService.getUsers(), builder: (context, snapshot) {
-      return Container();
-    });
   }
 }

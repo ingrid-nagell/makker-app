@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:makker_app/client/database_service_activities.dart';
+import 'package:makker_app/client/database_helper.dart';
 import 'package:makker_app/client/user_provider.dart';
 import 'package:makker_app/screens/my_activities.dart';
 
 // from widgets:
 import 'package:makker_app/widgets/app_nav_bar.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 class CreateActivityForm extends StatefulWidget {
@@ -16,7 +15,9 @@ class CreateActivityForm extends StatefulWidget {
 }
 class _CreateActivityFormState extends State<CreateActivityForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final DatabaseServiceActivities _databaseService = DatabaseServiceActivities.instance;
+
+  final activityManager = ActivityManager();
+
   late final currentUser;
 
   String _date = '';
@@ -35,7 +36,7 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
     currentUser = Provider.of<UserProvider>(this.context, listen: false).user;
 
     setState(() {
-      _userId = currentUser?.id ?? 0;
+      _userId = currentUser.userId ?? 0;
     });
   }
 
@@ -43,16 +44,18 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
     // Check if the form is valid
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      _databaseService.addActivity(
-        _userId,
+
+      activityManager.createActivity(
+        _title,
         _date,
         _category,
         _type,
         _location,
         _rendezvous,
-        _title,
-        _description
+        _description,
+        _userId
       );
+
       showDialog(
         context: this.context,
         builder: (context) {
@@ -174,7 +177,7 @@ class _CreateActivityFormState extends State<CreateActivityForm> {
                 ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                  return 'Vennligst velg en aktivitetstype.';
+                    return 'Vennligst velg en aktivitetstype.';
                   }
                 },
                 onChanged: (value) {

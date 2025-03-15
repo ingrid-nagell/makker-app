@@ -4,15 +4,21 @@ import 'package:provider/provider.dart';
 
 // import from client/:
 import 'client/user_provider.dart';
+import 'client/database_helper.dart';
 
 // import from screens/
 import 'screens/home.dart';
 
-// import from dev
-import 'dev/delete_db.dart';
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized;
+  DatabaseHelper dbHelper = DatabaseHelper.instance;
+  // Print table records
+  await dbHelper.printTableRecords();
+
+  // Delete the database
+  // await dbHelper.deleteDatabase();
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => UserProvider(),
@@ -27,11 +33,6 @@ class MakkerApp extends StatelessWidget {
   // Widget root of application.
   @override
   Widget build(BuildContext context) {
-
-    // For dev (deleting DBs)
-    // deleteDatabase('/data/user/0/com.example.makker_app/databases/activities.db');
-    // deleteDatabase('/data/user/0/com.example.makker_app/databases/users.db');
-
     return MaterialApp(
       title: 'MakkerTheme',
       theme: ThemeData(

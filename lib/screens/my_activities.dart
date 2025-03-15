@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:makker_app/client/database_service_activities.dart';
-// import 'package:makker_app/client/database_service_attendees.dart';
+import 'package:makker_app/client/database_helper.dart';
 import 'package:makker_app/client/user_provider.dart';
 import 'package:makker_app/models/activities.dart';
 import 'package:makker_app/models/users.dart';
@@ -20,7 +19,7 @@ class MyActivities extends StatefulWidget {
 }
 
 class _MyActivities extends State<MyActivities> {
-  final DatabaseServiceActivities _databaseServiceActivities = DatabaseServiceActivities.instance;
+  final activityManager = ActivityManager();
   // late Future<List<Activity>> myActivities;
   late final User? currentUser;
   int _userId = 0;
@@ -32,7 +31,7 @@ class _MyActivities extends State<MyActivities> {
     currentUser = Provider.of<UserProvider>(context, listen: false).user;
 
     setState(() {
-      _userId = currentUser?.id ?? 0;
+      _userId = currentUser?.userId ?? 0;
     });
   }
 
@@ -54,7 +53,7 @@ class _MyActivities extends State<MyActivities> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              _buildMyActivitiesList(_databaseServiceActivities.getMyActivities(_userId)),
+              _buildMyActivitiesList(activityManager.getMyActivities(_userId)),
               const Divider(
                 color: Color.fromARGB(255, 170, 52, 52),
                 height: 20,
@@ -103,14 +102,14 @@ class _MyActivities extends State<MyActivities> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: _buildActivityCard(
-                    activityId: activity.id,
-                    category: activity.category,
-                    title: activity.title,
-                    description: activity.description,
-                    date: activity.date,
-                    location: activity.location,
-                    type: activity.type,
-                    userId: activity.userId,
+                    activityId: activity.activityId,
+                    category: activity.activityCategory,
+                    title: activity.activityTitle,
+                    description: activity.activityDescription,
+                    date: activity.activityDate,
+                    location: activity.activityLocation,
+                    type: activity.activityType,
+                    userId: activity.createdBy,
                   ),
                 );
               },

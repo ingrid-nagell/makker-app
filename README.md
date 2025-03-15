@@ -9,6 +9,7 @@ Makker (english: buddy) is an app that will help outdoor enthusiasts finding the
 * Flutter
 * SQFLite
 * Android Studio
+* Google Cloud, mysql instance
 
 ## FLutter cmd:
 * flutter doctor

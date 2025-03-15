@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:makker_app/client/database_helper.dart';
 
 // Clients:
-import 'package:makker_app/client/database_service_activities.dart';
 import 'package:makker_app/client/user_provider.dart';
 
 // Widgets:
@@ -19,7 +19,7 @@ class ShopActivity extends StatefulWidget {
 }
 
 class _ShopActivityState extends State<ShopActivity> {
-  final DatabaseServiceActivities _databaseServiceActivities = DatabaseServiceActivities.instance;
+  final activityManager = ActivityManager();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _ShopActivityState extends State<ShopActivity> {
         _buildActivityFilter(),
         Expanded(
           child: FutureBuilder<List<Activity>>(
-            future: _databaseServiceActivities.getActivities(),
+            future: activityManager.getActivities(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
@@ -58,15 +58,14 @@ class _ShopActivityState extends State<ShopActivity> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: _buildActivityCard(
-                        activityId: activity.id,
-                        category: activity.category,
-                        title: activity.title,
-                        description: activity.description,
-                        date: activity.date,
-                        location: activity.location,
-                        type: activity.type,
-                        userId: activity.userId,
-                        deltager: false,
+                        activityId: activity.activityId,
+                        category: activity.activityCategory,
+                        title: activity.activityTitle,
+                        description: activity.activityDescription,
+                        date: activity.activityDate,
+                        location: activity.activityLocation,
+                        type: activity.activityType,
+                        userId: activity.createdBy,
                       ),
                     );
                   },
@@ -163,7 +162,6 @@ class _ShopActivityState extends State<ShopActivity> {
     required String type,
 
     required int userId,
-    required bool deltager,
 
   }) {
     final currentUser = Provider.of<UserProvider>(context).user;
@@ -202,7 +200,7 @@ class _ShopActivityState extends State<ShopActivity> {
         const SizedBox(height: 10),
         Align(
         alignment: Alignment.bottomRight,
-        child: currentUser?.id == userId ? AuthorWidget(databaseServiceActivities: _databaseServiceActivities, activityId: activityId) : NotAuthorWidget(),
+        child: currentUser?.userId == userId ? AuthorWidget(activityId: activityId) : NotAuthorWidget(),
         ),
       ],
       ),
@@ -211,10 +209,10 @@ class _ShopActivityState extends State<ShopActivity> {
 }
 
 class AuthorWidget extends StatelessWidget {
-  final DatabaseServiceActivities databaseServiceActivities;
+  final activityManager = ActivityManager();
   final int activityId;
 
-  const AuthorWidget({super.key, required this.databaseServiceActivities, required this.activityId});
+  AuthorWidget({super.key, required this.activityId});
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +220,7 @@ class AuthorWidget extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: () {},
-          child: Text('Du er arrangør.'),
+          child: const Text('Du er arrangør.'),
         ),
         TextButton(
             onPressed: () {
@@ -235,10 +233,10 @@ class AuthorWidget extends StatelessWidget {
                 actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    databaseServiceActivities.updateActivity(activityId, "false");
+                    activityManager.updateActivity(activityId, "false");
                     Navigator.of(context).pop();
                   },
-                  child: Text('Ja, avlys'),
+                  child: const Text('Ja, avlys'),
                 ),
                 ElevatedButton(
                   child: const Text('Avbryt'),
@@ -251,7 +249,7 @@ class AuthorWidget extends StatelessWidget {
               },
             );
           },
-          child: Text('Avlys arrangement'),
+          child: const Text('Avlys arrangement'),
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:makker_app/client/database_helper.dart';
 import 'package:makker_app/client/user_provider.dart';
 import 'package:makker_app/screens/home.dart';
 
@@ -26,6 +27,10 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     final currentUser = Provider.of<UserProvider>(context).user;
 
+    DatabaseHelper dbHelper = DatabaseHelper.instance;
+    // Print table records
+    dbHelper.printTableRecords();
+
     return Scaffold(
       appBar: const AppBarNav(title: "Min side", isLoggedIn: true),
       body: SingleChildScrollView(
@@ -37,7 +42,7 @@ class _MyPageState extends State<MyPage> {
             Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 25.0, bottom: 25),
               child: Text(
-                'Velkommen til Makker,\n${currentUser?.firstname} ❤️💪',
+                'Velkommen til Makker,\n${currentUser?.firstName} ❤️💪',
                 style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center,
               ),
             ),
